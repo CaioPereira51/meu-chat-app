@@ -1,0 +1,7 @@
+{
+  "theme": "dark",
+  "language": "pt-BR",
+  "modelsDirectory": "modelos",
+  "llamafilePort": 8080,
+  "llamafileHost": "127.0.0.1"
+}

@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Model Selection Dashboard | Nexus AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Geist:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "tertiary-fixed-dim": "#89ceff",
+                    "on-tertiary-fixed": "#001e2f",
+                    "on-tertiary-fixed-variant": "#004c6e",
+                    "secondary-fixed-dim": "#ddb7ff",
+                    "on-tertiary": "#00344d",
+                    "on-surface-variant": "#c7c4d7",
+                    "surface-container": "#171f33",
+                    "background": "#0b1326",
+                    "secondary-container": "#6f00be",
+                    "error": "#ffb4ab",
+                    "error-container": "#93000a",
+                    "on-primary-fixed-variant": "#2f2ebe",
+                    "surface-bright": "#31394d",
+                    "inverse-primary": "#494bd6",
+                    "surface-dim": "#0b1326",
+                    "on-background": "#dae2fd",
+                    "on-secondary-fixed-variant": "#6900b3",
+                    "on-secondary-fixed": "#2c0051",
+                    "on-error-container": "#ffdad6",
+                    "surface-variant": "#2d3449",
+                    "inverse-on-surface": "#283044",
+                    "on-surface": "#dae2fd",
+                    "primary-container": "#8083ff",
+                    "outline": "#908fa0",
+                    "secondary-fixed": "#f0dbff",
+                    "on-secondary": "#490080",
+                    "inverse-surface": "#dae2fd",
+                    "primary-fixed-dim": "#c0c1ff",
+                    "tertiary-fixed": "#c9e6ff",
+                    "tertiary-container": "#009ada",
+                    "secondary": "#ddb7ff",
+                    "outline-variant": "#464554",
+                    "surface-container-high": "#222a3d",
+                    "surface-container-low": "#131b2e",
+                    "tertiary": "#89ceff",
+                    "on-tertiary-container": "#002d43",
+                    "on-error": "#690005",
+                    "surface": "#0b1326",
+                    "surface-tint": "#c0c1ff",
+                    "on-primary-fixed": "#07006c",
+                    "on-primary-container": "#0d0096",
+                    "primary-fixed": "#e1e0ff",
+                    "on-secondary-container": "#d6a9ff",
+                    "on-primary": "#1000a9",
+                    "surface-container-highest": "#2d3449",
+                    "primary": "#c0c1ff",
+                    "surface-container-lowest": "#060e20"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "spacing": {
+                    "lg": "1.5rem",
+                    "xl": "2rem",
+                    "margin-desktop": "40px",
+                    "gutter": "24px",
+                    "margin-mobile": "16px",
+                    "xs": "0.25rem",
+                    "sm": "0.5rem",
+                    "md": "1rem",
+                    "base": "4px",
+                    "sidebar-width": "280px",
+                    "2xl": "3rem"
+            },
+            "fontFamily": {
+                    "headline-md": ["Geist"],
+                    "body-md": ["Inter"],
+                    "button": ["Geist"],
+                    "body-sm": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg-mobile": ["Geist"],
+                    "label-mono": ["JetBrains Mono"],
+                    "display": ["Geist"],
+                    "headline-lg": ["Geist"]
+            },
+            "fontSize": {
+                    "headline-md": ["24px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                    "body-md": ["16px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "button": ["14px", {"lineHeight": "1.0", "fontWeight": "500"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                    "label-mono": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                    "display": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "700"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #020617;
+            color: #dae2fd;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .active-indicator {
+            position: relative;
+        }
+        .active-indicator::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 25%;
+            height: 50%;
+            width: 2px;
+            background-color: #c0c1ff;
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(70, 69, 84, 0.3);
+        }
+        .model-card-hover:hover {
+            border-color: #c0c1ff;
+            background: rgba(30, 41, 59, 0.8);
+            box-shadow: 0 0 20px rgba(192, 193, 255, 0.1);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b1326;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2d3449;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #464554;
+        }
+    </style>
+</head>
+<body class="flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-sidebar-width bg-surface-container dark:bg-surface-container flex flex-col py-xl z-50">
+<div class="px-lg mb-2xl">
+<div class="flex items-center gap-md mb-xs">
+<span class="material-symbols-outlined text-primary text-3xl" style="font-variation-settings: 'FILL' 1;">dataset</span>
+<h1 class="font-headline-lg text-headline-lg text-primary">Nexus AI</h1>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-70">Enterprise Suite</p>
+</div>
+<nav class="flex-grow space-y-xs">
+<a class="flex items-center gap-md bg-primary/5 text-primary border-l-2 border-primary px-lg py-md font-body-sm text-body-sm transition-all" href="#">
+<span class="material-symbols-outlined">grid_view</span>
+<span>Models</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-lg py-md font-body-sm text-body-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">chat</span>
+<span>Chat</span>
+</a>
+<div class="pt-xl px-lg">
+<button class="w-full bg-primary-container text-on-primary-container py-md px-lg rounded-xl font-button text-button hover:opacity-90 active:scale-98 transition-transform flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined">add</span>
+                    New Chat
+                </button>
+</div>
+</nav>
+<div class="mt-auto border-t border-outline-variant/20 pt-lg space-y-xs">
+<a class="flex items-center gap-md text-on-surface-variant px-lg py-md font-body-sm text-body-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">help</span>
+<span>Help</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant px-lg py-md font-body-sm text-body-sm hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined">history</span>
+<span>History</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-grow ml-sidebar-width flex flex-col min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center w-full px-margin-desktop h-16 bg-surface-container-low dark:bg-surface-container-low sticky top-0 z-40">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full group">
+<span class="material-symbols-outlined absolute left-md top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container-highest/30 border border-outline-variant focus:border-primary focus:ring-0 rounded-full pl-xl pr-md py-sm font-body-sm text-body-sm text-on-surface placeholder:text-on-surface-variant/50 transition-all" placeholder="Search models, tasks, or capabilities..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-lg ml-xl">
+<button class="p-base rounded-full hover:bg-surface-variant transition-colors text-on-surface-variant active:scale-95 duration-200">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-base rounded-full hover:bg-surface-variant transition-colors text-on-surface-variant active:scale-95 duration-200">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant hover:border-primary transition-colors cursor-pointer">
+<img alt="User profile" data-alt="A professional close-up portrait of a tech executive in a high-tech minimalist office setting. The lighting is soft and cinematic with cool blue and deep indigo tones reflecting the AI platform's corporate modern aesthetic. The individual has a confident, innovative look, and the background features blurred abstract geometric digital displays." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCh3MSYI2hCMTb_05jp9kYquOIfniPiztNS14hlRz-r-LUwcpgvy4lTn8chLdV9DYTWOqVX9D2Xz5kcUZ85ybuPnng1WrzboZQgJnvCgOA94gHZLoEvr3FvF2A8UqQDQK9MqE3VEg30zsLsD7Nlhlh3IjexYUPz3rbig77BRwOLe6O1Lg41ZzQ0yHdbHl0jIsayjCrI5NeYwFdyGhvXuxMERZefxUTn2QtyLmxjGsMZXxvNGRjsBWK02UCuQbRrDeHmPb4J491HPozx"/>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-margin-desktop">
+<div class="flex flex-col md:flex-row justify-between items-end gap-lg mb-2xl">
+<div class="space-y-sm">
+<span class="font-label-mono text-label-mono text-primary uppercase tracking-widest">Workspace / Models</span>
+<h2 class="font-headline-lg text-headline-lg">Model Selection</h2>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">Choose a foundational model optimized for your specific task or create a custom configuration using the deployment studio.</p>
+</div>
+<div class="flex gap-md">
+<div class="flex items-center gap-xs bg-surface-container-high px-md py-xs rounded-lg border border-outline-variant">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Filter by:</span>
+<select class="bg-transparent border-none focus:ring-0 font-body-sm text-body-sm text-on-surface p-0 cursor-pointer">
+<option>All Types</option>
+<option>Text Generation</option>
+<option>Image Analysis</option>
+<option>Code Specialized</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Bento Grid of Models -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
+<!-- Model Card 1: Nexus-1 Ultra -->
+<div class="glass-card rounded-xl p-lg flex flex-col model-card-hover transition-all group relative overflow-hidden">
+<div class="absolute -right-8 -top-8 w-24 h-24 bg-primary/10 blur-3xl group-hover:bg-primary/20 transition-all"></div>
+<div class="flex justify-between items-start mb-md">
+<div class="p-sm bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">neurology</span>
+</div>
+<span class="font-label-mono text-label-mono bg-surface-container-highest px-sm py-xs rounded text-primary border border-primary/20">TEXT-GEN</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-xs">Nexus-1 Ultra</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-xl flex-grow leading-relaxed">Our flagship multimodal model designed for complex reasoning, creative synthesis, and deep analytical tasks across 100+ languages.</p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border border-surface-container bg-surface-bright flex items-center justify-center text-[10px] font-bold">API</div>
+<div class="w-6 h-6 rounded-full border border-surface-container bg-surface-bright flex items-center justify-center text-[10px] font-bold">WEB</div>
+</div>
+<button class="bg-primary text-on-primary-fixed px-lg py-sm rounded-lg font-button text-button hover:brightness-110 active:scale-95 transition-all">Select</button>
+</div>
+</div>
+<!-- Model Card 2: Vision-X -->
+<div class="glass-card rounded-xl p-lg flex flex-col model-card-hover transition-all group relative overflow-hidden">
+<div class="flex justify-between items-start mb-md">
+<div class="p-sm bg-tertiary/10 rounded-lg">
+<span class="material-symbols-outlined text-tertiary" style="font-variation-settings: 'FILL' 1;">visibility</span>
+</div>
+<span class="font-label-mono text-label-mono bg-surface-container-highest px-sm py-xs rounded text-tertiary border border-tertiary/20">VISION</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-xs">Vision-X</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-xl flex-grow leading-relaxed">High-fidelity image understanding and spatial reasoning. Specialized in OCR, architectural analysis, and medical imaging diagnostics.</p>
+<div class="flex items-center justify-between mt-auto">
+<div class="text-tertiary flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">bolt</span>
+<span class="font-label-mono text-[10px]">Real-time Latency</span>
+</div>
+<button class="bg-surface-container-highest text-on-surface px-lg py-sm rounded-lg font-button text-button hover:bg-surface-variant active:scale-95 transition-all">Select</button>
+</div>
+</div>
+<!-- Model Card 3: CodeMaster Pro -->
+<div class="glass-card rounded-xl p-lg flex flex-col model-card-hover transition-all group relative overflow-hidden">
+<div class="flex justify-between items-start mb-md">
+<div class="p-sm bg-secondary/10 rounded-lg">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">code</span>
+</div>
+<span class="font-label-mono text-label-mono bg-surface-container-highest px-sm py-xs rounded text-secondary border border-secondary/20">DEVELOPER</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-xs">CodeMaster Pro</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-xl flex-grow leading-relaxed">Optimized for software engineering. Capable of generating entire microservices, refactoring legacy code, and debugging complex CI/CD pipelines.</p>
+<div class="flex items-center justify-between mt-auto">
+<div class="text-secondary flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">terminal</span>
+<span class="font-label-mono text-[10px]">20+ Languages</span>
+</div>
+<button class="bg-surface-container-highest text-on-surface px-lg py-sm rounded-lg font-button text-button hover:bg-surface-variant active:scale-95 transition-all">Select</button>
+</div>
+</div>
+<!-- Model Card 4: AudioSync 2.0 -->
+<div class="glass-card rounded-xl p-lg flex flex-col model-card-hover transition-all group relative overflow-hidden">
+<div class="flex justify-between items-start mb-md">
+<div class="p-sm bg-error/10 rounded-lg">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">graphic_eq</span>
+</div>
+<span class="font-label-mono text-label-mono bg-surface-container-highest px-sm py-xs rounded text-error border border-error/20">AUDIO</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-xs">AudioSync 2.0</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-xl flex-grow leading-relaxed">Ultra-low latency speech-to-speech translation and high-fidelity vocal synthesis with emotional prosody control.</p>
+<div class="flex items-center justify-between mt-auto">
+<div class="text-error flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">mic</span>
+<span class="font-label-mono text-[10px]">99.8% Accuracy</span>
+</div>
+<button class="bg-surface-container-highest text-on-surface px-lg py-sm rounded-lg font-button text-button hover:bg-surface-variant active:scale-95 transition-all">Select</button>
+</div>
+</div>
+<!-- Model Card 5: LogicGraph v3 -->
+<div class="glass-card rounded-xl p-lg flex flex-col model-card-hover transition-all group relative overflow-hidden">
+<div class="flex justify-between items-start mb-md">
+<div class="p-sm bg-primary-container/10 rounded-lg">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">hub</span>
+</div>
+<span class="font-label-mono text-label-mono bg-surface-container-highest px-sm py-xs rounded text-primary-container border border-primary-container/20">LOGIC</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-xs">LogicGraph v3</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-xl flex-grow leading-relaxed">Specialized in symbolic reasoning and knowledge graph integration for complex scientific and legal research.</p>
+<div class="flex items-center justify-between mt-auto">
+<div class="text-primary-container flex items-center gap-xs">
+<span class="material-symbols-outlined text-sm">science</span>
+<span class="font-label-mono text-[10px]">Zero Hallucination</span>
+</div>
+<button class="bg-surface-container-highest text-on-surface px-lg py-sm rounded-lg font-button text-button hover:bg-surface-variant active:scale-95 transition-all">Select</button>
+</div>
+</div>
+<!-- Add New Model Card -->
+<div class="rounded-xl border-2 border-dashed border-outline-variant hover:border-primary/50 hover:bg-primary/5 p-lg flex flex-col items-center justify-center text-center transition-all cursor-pointer group min-h-[280px]">
+<div class="w-16 h-16 rounded-full bg-surface-container flex items-center justify-center mb-md group-hover:scale-110 group-hover:bg-primary/20 transition-all duration-300">
+<span class="material-symbols-outlined text-4xl text-on-surface-variant group-hover:text-primary transition-colors">add</span>
+</div>
+<h3 class="font-headline-md text-headline-md mb-xs">Add New Model</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-[200px]">Connect your custom weights or integrate via API key.</p>
+</div>
+</div>
+<!-- Promotion / Stats Section -->
+<div class="mt-2xl grid grid-cols-1 md:grid-cols-2 gap-lg">
+<div class="relative rounded-xl overflow-hidden h-48 group">
+<img alt="Platform Intelligence" class="absolute inset-0 w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 group-hover:scale-105" data-alt="A futuristic, high-end laboratory environment with clean white surfaces and blue lighting. Abstract representations of neural networks and data streams are integrated into the glass walls and sleek furniture. The image has a cinematic quality with sharp focus on technical details, reflecting a sophisticated, innovative AI workspace." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCRO8Qqdghr767i9kH8nz-02fDQUMG7uQgrv_4hQ08YbqbQbOGLvNiyDPpwfq4I5PYFLw8ym9It94fQ90ysQFY3vAxA9H6BtkWAvA46gnMEn-bM9bEsHRu_pFMMrPjc8AQVFzDdWZafeJ-Cw9TtmA9-AZJCog9t4SJUm_rI7DcEEJBQGiHH9B3ABtrt0Ri1rjoJxWgpM5jXSm7l9YHASAd2TAyhWzXKiS0yFrexf6Ps2wqyhtD6a_-p7rC8Pnze0PghE05ZcQNrd5T_"/>
+<div class="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-transparent flex items-center p-xl">
+<div class="max-w-xs space-y-md">
+<h4 class="font-headline-md text-headline-md text-primary">Train Your Own</h4>
+<p class="font-body-sm text-body-sm text-on-surface">Fine-tune foundational models with your proprietary dataset in a secure environment.</p>
+<button class="font-button text-button text-primary flex items-center gap-xs group">
+                                Explore training studio <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<div class="glass-card rounded-xl p-xl flex flex-col justify-center">
+<div class="flex items-center justify-around text-center">
+<div>
+<p class="font-display text-[32px] text-primary mb-base">2.4k</p>
+<p class="font-label-mono text-label-mono uppercase text-on-surface-variant">Active Instances</p>
+</div>
+<div class="h-12 w-px bg-outline-variant"></div>
+<div>
+<p class="font-display text-[32px] text-tertiary mb-base">42ms</p>
+<p class="font-label-mono text-label-mono uppercase text-on-surface-variant">Avg Latency</p>
+</div>
+<div class="h-12 w-px bg-outline-variant"></div>
+<div>
+<p class="font-display text-[32px] text-secondary mb-base">99.9%</p>
+<p class="font-label-mono text-label-mono uppercase text-on-surface-variant">Reliability</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Footer spacing -->
+<footer class="mt-auto py-lg px-margin-desktop text-center border-t border-outline-variant/10">
+<p class="font-body-sm text-body-sm text-on-surface-variant/40">Nexus AI Engine v4.2.0 • Secured by Neural Shield Protocol</p>
+</footer>
+</main>
+<!-- Micro-interaction Script -->
+<script>
+        document.querySelectorAll('button').forEach(button => {
+            button.addEventListener('mousedown', function() {
+                this.classList.add('scale-95');
+            });
+            button.addEventListener('mouseup', function() {
+                this.classList.remove('scale-95');
+            });
+            button.addEventListener('mouseleave', function() {
+                this.classList.remove('scale-95');
+            });
+        });
+
+        // Search highlight effect
+        const searchInput = document.querySelector('input[type="text"]');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-1', 'ring-primary/50');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-1', 'ring-primary/50');
+        });
+    </script>
+</body></html>
